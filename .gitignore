@@ -28,3 +28,4 @@ deploy2Remote.bat
 .vscode
 dist/
 node_modules*/
+workspace

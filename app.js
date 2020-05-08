@@ -7,6 +7,8 @@ let logger = require('morgan');
 let history = require('connect-history-api-fallback');
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
+let articleRouter = require("./routes/article");
+let fileRouter = require("./routes/file");
 const middleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const compiler = webpack(webpackConfig);
@@ -26,8 +28,10 @@ app.use(express.static('vue/src/assets'));
 // app.use(express.static(path.join(__dirname, 'public')));
 console.log(path.join(__dirname, 'public'));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/article', articleRouter);
+app.use("/api/file", fileRouter);
 
 //前端路由
 app.use(history({

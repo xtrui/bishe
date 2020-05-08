@@ -79,18 +79,18 @@ let webpackConfig = {
                     'css-loader'
                 ]
             },
-            {
-                test: /\.(jpe?g|png|gif|ico)$/,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 8192, // 小于8k的图片自动转成base64格式
-                            outputPath: 'images/' //图片打包后的文件夹
-                        }
-                    }
-                ]
-            }
+            // {
+            //     test: /\.(jpe?g|png|gif|ico)$/,
+            //     use: [
+            //         {
+            //             loader: 'url-loader',
+            //             options: {
+            //                 // limit: 8192, // 小于8k的图片自动转成base64格式
+            //                 outputPath: 'images/' //图片打包后的文件夹
+            //             }
+            //         }
+            //     ]
+            // }
         ]
 
         // rules: [
@@ -143,7 +143,7 @@ let webpackConfig = {
             template: resolvePath('./public/index.html'),
             filename: 'index.html',
             inject: true,
-            favicon: resolvePath('./public/logo.png')
+            favicon: resolvePath('./public/2.jpg'),
         })
     ],
     // optimization: {
