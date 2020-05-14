@@ -19,6 +19,7 @@
         overflow: hidden;
         background-image: url("../assets/2.jpg");
         background-position: center;
+        background-size: cover;
         display: flex;
         align-items: center;
         justify-content: center;

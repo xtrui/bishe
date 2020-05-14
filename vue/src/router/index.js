@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import editor from "../views/Editor";
 import Article from "../views/Article";
+import Category from "../views/Category";
+import Search from "../views/Search";
 
 Vue.use(VueRouter)
 
@@ -16,6 +18,16 @@ const routes = [
         path: '/articles/:id',
         name: 'article',
         component: Article
+    },
+    {
+        path: '/category/:id',
+        name: 'category',
+        component: Category
+    },
+    {
+        path: '/search/:key',
+        name: 'search',
+        component: Search
     },
     //管理员路由
     {

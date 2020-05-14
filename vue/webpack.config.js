@@ -143,7 +143,7 @@ let webpackConfig = {
             template: resolvePath('./public/index.html'),
             filename: 'index.html',
             inject: true,
-            favicon: resolvePath('./public/2.jpg'),
+            favicon: resolvePath('./public/logo.png')
         })
     ],
     // optimization: {

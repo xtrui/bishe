@@ -9,7 +9,7 @@
                 <i class="el-icon-view"></i>
             </div>
         </div>
-        <mavon-editor defaultOpen="preview" :toolbarsFlag="false" :subfield="false" :preview="true"
+        <mavon-editor defaultOpen="preview" :toolbarsFlag="false" :boxShadow="false" :subfield="false" :preview="true"
                       v-model="article.content"/>
     </div>
 </template>
@@ -25,7 +25,7 @@
         },
         data() {
             return {
-                blogBody: "## 看看效果",
+                blogBody: "",
             }
         },
         props: {

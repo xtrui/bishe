@@ -23,7 +23,7 @@
                 </el-option>
             </el-select>
         </div>
-        <mavon-editor ref="md" v-model="content" @imgAdd="imgAdd" @imgDel="imgDel"
+        <mavon-editor class="editor" ref="md" v-model="content" @imgAdd="imgAdd" @imgDel="imgDel"
                       placeholder="开始你的创作吧...."
         />
 
@@ -43,12 +43,21 @@
         text-align: left;
         margin-bottom: 20px;
     }
+
+    h2, h3 {
+        margin: 15px 0 15px;
+    }
+
+    .editor {
+        min-height: 700px;
+    }
 </style>
 
 <script>
     // Local Registration
     // import mavonEditor from 'mavon-editor'
     import axios from "axios"
+    import http from "axios"
     import mavonEditor from 'mavon-editor'
     import 'mavon-editor/dist/css/index.css'
 
@@ -61,16 +70,7 @@
             return {
                 content: "",
                 title: '',
-                options: [{
-                    value: 1,
-                    label: 'HTML'
-                }, {
-                    value: 2,
-                    label: 'CSS'
-                }, {
-                    value: 3,
-                    label: 'JavaScript'
-                }],
+                options: [],
                 categories: [],
                 article: {
                     title: '',
@@ -81,7 +81,7 @@
         },
         mounted() {
             //加载分类
-
+            this.initCategories();
         },
         methods: {
             click: function () {
@@ -91,10 +91,22 @@
                 //     message: '<a href="/articles/'+'7"'+'>点击前往主页查看</a>',
                 //     type: 'success'
                 // });
-                this.article.categories = this.categories;
-                this.article.title = this.title;
-                this.article.content = this.content;
-                this.postArticle();
+                if (this.categories.length === 0 || this.title === '' || this.content === '') {
+                    this.$alert('请勿留空', 'warn', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `发布取消`
+                            });
+                        }
+                    });
+                } else {
+                    this.article.categories = this.categories;
+                    this.article.title = this.title;
+                    this.article.content = this.content;
+                    this.postArticle();
+                }
             },
 
             //发表文章
@@ -112,14 +124,19 @@
             },
 
             //加载分类
-            async initCategory() {
-                await axios.get('/articles/category/').then(res => {
-                    // 循环分类，构成option
-                    this.options = res.data.categories;
-                })
-                    .catch(error => {
-                        console.log(error)
-                    });
+            async initCategories() {
+                await http.get("/api/article/category/All")
+                    .then(res => {
+                        let data = {};
+                        data = res.data;
+                        data.forEach(e => {
+                            this.options.push({value: e.id, label: e.categoryName});
+                        })
+                        console.log(res.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             },
 
             // 绑定@imgAdd event

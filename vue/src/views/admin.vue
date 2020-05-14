@@ -6,12 +6,12 @@
                 <el-radio-button :label="true">收起</el-radio-button>
             </el-radio-group>
             <el-menu
-                    default-active="2"
+                    default-active="1-1"
                     class="el-menu-vertical-demo"
                     background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b"
-                    :collapse="isCollapse"
+                    :collapse="!isCollapse"
             >
 
                 <el-submenu index="1">
@@ -20,7 +20,7 @@
                         <span>文章管理</span>
                     </template>
                     <el-menu-item index="1-1">
-                        <router-link to="blog"><span>发表文章</span></router-link>
+                        <span>发表文章</span>
                     </el-menu-item>
                 </el-submenu>
                 <el-menu-item index="4">
@@ -61,10 +61,11 @@
                 <el-menu
                         class="el-menu-demo"
                         mode="horizontal"
-                        @select="handleSelect"
+                        @select="handleSelect(index,indexPath)"
                         background-color="#545c64"
                         text-color="#fff"
-                        active-text-color="#ffd04b">
+                        active-text-color="#ffd04b"
+                >
                     <el-menu-item index="1">主页</el-menu-item>
                     <el-menu-item index="2">目录</el-menu-item>
                     <!--                    <el-submenu index="2">-->
@@ -111,6 +112,10 @@
         background-color: #dddddd;
     }
 
+    a > span {
+        color: white;
+    }
+
 </style>
 
 <script>
@@ -131,12 +136,10 @@
             }
         },
         methods: {
-            handleSelect(key, keyPath) {
-                // eslint-disable-next-line no-console
-                console.log(key + keyPath);
+            handleSelect(index, indexPath) {
+                console.log(index + indexPath);
             }
         },
-
 
     }
 </script>

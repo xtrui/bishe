@@ -10,7 +10,8 @@
                             <button @click="drawer = true"><i class="el-icon-s-comment"></i></button>
                         </el-col>
                         <el-col :span="6">
-                            <RightSlider :class="{fix:isFix}" class="hidden-md-and-down"></RightSlider>
+                            <RightSlider :class="{fix:isFix}" :categories=categories
+                                         class="hidden-md-and-down"></RightSlider>
                         </el-col>
                     </el-row>
                     <el-drawer
@@ -50,6 +51,7 @@
                     categories: '',
                     comments: ''
                 },
+                categories: [],
             }
         },
         methods: {
@@ -78,6 +80,16 @@
                         console.log(err);
                     })
             },
+            //获取目录
+            async getAllCategory() {
+                await http.get("/api/article/category/All")
+                    .then(res => {
+                        this.categories = res.data;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            },
         },
         mounted() {
             // 监听鼠标滚动事件
@@ -93,6 +105,7 @@
             //         console.log(err);
             //     })
             this.getArticle();
+            this.getAllCategory();
         },
         destroyed() {
             window.removeEventListener('scroll', this.handleScroll)
