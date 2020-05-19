@@ -49,7 +49,7 @@
     }
 
     .editor {
-        min-height: 700px;
+        min-height: 550px;
     }
 </style>
 
@@ -111,11 +111,12 @@
 
             //发表文章
             async postArticle() {
-                await axios.post("/api/article/postArticle", this.article).then(res => {
+                await axios.post("/api/admin/postArticle", this.article).then(res => {
                     this.$notify({
                         title: '发布成功',
                         dangerouslyUseHTMLString: true,
                         message: '<a href="/articles/' + res.data.id + '"' + '>点击查看文章</a>',
+                        duration: 0,
                         type: 'success'
                     });
                 }).catch(error => {

@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+<!--        头部导航-->
         <nav-top></nav-top>
         <section id="section1">
             <div id="main_post">
@@ -61,6 +62,7 @@
                 totalArticleNum: 1,
                 articleList: [],
                 totalPage: 1,
+                username: ''
             }
         },
         mounted() {
@@ -68,7 +70,6 @@
         },
         methods: {
             handleCurrentChange() {
-                console.log(this.currentPage);
                 this.getArticleListByPage();
             },
             async getArticleListByPage() {
@@ -77,7 +78,6 @@
                         this.totalPage = res.data.totalPage;
                         this.articleList = res.data.articleIdAndTitleList;
                         this.totalArticleNum = this.totalPage * 20;
-                        console.log(res.data);
                     })
                     .catch(err => {
                         console.log(err)

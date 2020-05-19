@@ -14,11 +14,31 @@
                                          class="hidden-md-and-down"></RightSlider>
                         </el-col>
                     </el-row>
-                    <el-drawer
-                            title="我是标题"
-                            :visible.sync="drawer"
-                            :with-header="false">
-                        <BlogBody :article=article></BlogBody>
+                    <el-drawer class="drawer_rtl"
+                               title="我是标题"
+                               :visible.sync="drawer"
+                               :with-header="false"
+                               size="30%"
+
+                    >
+                        <!--                        这里放评论组件-->
+                        <!--                        <BlogBody :article=article></BlogBody>-->
+                        <Comment v-for="e in article.comments" :comment="e" :key="e.id"></Comment>
+                        <el-pagination
+                                @current-change="pageChange"
+                                :current-page.sync="currentPage"
+                                :page-size="9"
+                                :hide-on-single-page="true"
+                                layout="prev, pager, next, jumper"
+                                :total="totalCommentNum"
+                                :pager-count="5"
+                        >
+                        </el-pagination>
+                        <div class="com_textarea" v-if="logined">
+                            <textarea cols="80" name="msg" v-model="comment" rows="5"
+                                      placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。" class="ipt-txt"></textarea>
+                            <el-button type="primary" style="height: 80px" @click="postComment">发表评论</el-button>
+                        </div>
                     </el-drawer>
                 </div>
             </div>
@@ -34,12 +54,16 @@
     import BlogBody from "../components/BlogBody";
     import 'element-ui/lib/theme-chalk/display.css';
     import http from 'axios';
+    import Comment from "../components/Comment";
 
     export default {
         name: "Article",
-        components: {BlogBody, MyFooter, RightSlider, Banner},
+        components: {Comment, BlogBody, MyFooter, RightSlider, Banner},
         data() {
             return {
+                comment: '',
+                totalCommentNum: 50,
+                currentPage: 1,
                 drawer: false,
                 isFix: true,
                 flag: true,
@@ -49,12 +73,16 @@
                     content: "",
                     time: "",
                     categories: '',
-                    comments: ''
+                    comments: []
                 },
                 categories: [],
+                logined: 0
             }
         },
         methods: {
+            pageChange() {
+                //todo 评论分页
+            },
             handleScroll() {
                 let scrollTop = window.pageYOffset;
                 let eTop = document.getElementsByClassName("hidden-md-and-down").item(0);
@@ -70,11 +98,42 @@
                     this.flag = true;
                 }
             },
+
+            //发表评论
+            async postComment() {
+                let comment = {};
+                let user = JSON.parse(localStorage.getItem("user"));
+
+                comment.content = this.comment;
+                comment.name = user.username;
+                console.log(user, comment);
+                await http.post("/api/users/u/postComment", {
+                    content: this.comment,
+                    user: user,
+                    articleId: this.$route.params.id
+                })
+                    .then(res => {
+                        if (res.status === 200) {
+                            this.$message({
+                                message: '发表成功，作者审核后可见',
+                                type: 'success'
+                            });
+                        } else {
+                            this.$message.error("发表失败");
+                        }
+                    })
+                    .catch(err => {
+                        this.$message.error("发表失败");
+                        console.log(err);
+                    })
+            },
             //获取文章细节
             async getArticle() {
                 await http.get("/api/article/detail/" + this.$route.params.id)
                     .then(res => {
                         this.article = res.data;
+                        this.totalCommentNum = this.article.comments.height;
+                        console.log(this.article)
                     })
                     .catch(err => {
                         console.log(err);
@@ -106,6 +165,12 @@
             //     })
             this.getArticle();
             this.getAllCategory();
+            //获取登录状态
+            let user = JSON.parse(localStorage.getItem('user'));
+            console.log(user);
+            if (user) {
+                this.logined = 1;
+            }
         },
         destroyed() {
             window.removeEventListener('scroll', this.handleScroll)
@@ -114,6 +179,13 @@
     }
 </script>
 
+<style>
+    .el-drawer.rtl {
+        overflow: scroll;
+        min-width: 558px;
+        /*width: 420px;*/
+    }
+</style>
 <style scoped>
     .blog_post {
         width: 1310px;
@@ -147,6 +219,17 @@
     .affix {
         position: fixed;
         top: 50px;
+    }
+
+    .ipt-txt {
+        width: 80%;
+        left: 15px;
+        float: left;
+    }
+
+    .com_textarea {
+        padding-top: 15px;
+        padding-left: 15px;
     }
 
 </style>

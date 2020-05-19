@@ -1,5 +1,6 @@
 <template>
     <div id="banner">
+        <NavTop></NavTop>
         <div>
             <h2>个人博客</h2>
         </div>
@@ -7,8 +8,16 @@
 </template>
 
 <script>
+    import NavTop from "./NavTop";
+
     export default {
-        name: "Banner"
+        name: "Banner",
+        components: {NavTop},
+        data() {
+            return {
+                username: ''
+            }
+        }
     }
 </script>
 

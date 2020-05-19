@@ -1,14 +1,17 @@
 let createError = require('http-errors');
 let webpackConfig = require('./vue/webpack.config.js');
+let random = require('string-random');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 let history = require('connect-history-api-fallback');
+let adminRouter = require('./routes/admin')
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
 let articleRouter = require("./routes/article");
 let fileRouter = require("./routes/file");
+let session = require('express-session');
 const middleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const compiler = webpack(webpackConfig);
@@ -22,6 +25,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
+//设置静态资源路径
 app.use(express.static('public'));
 app.use(express.static('vue/src/assets'));
 app.use(express.static('vue/src/public'));
@@ -29,12 +33,23 @@ app.use(express.static('vue/src/public'));
 // app.use(express.static(path.join(__dirname, 'public')));
 console.log(path.join(__dirname, 'public'));
 
+// 使用 cookieParser 中间件;
+app.use(cookieParser());
+//使用session
+let secret = random(128);
+app.use(session({
+    secret: secret,
+    cookie: {maxAge: 60 * 1000 * 300} //过期时间 ms
+}))
+
+//后端路由
+app.use('/api/admin', adminRouter);
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/article', articleRouter);
 app.use("/api/file", fileRouter);
 
-//前端路由
+//vue路由
 app.use(history({
     htmlAcceptHeaders: ['text/html'],
     index: '/',

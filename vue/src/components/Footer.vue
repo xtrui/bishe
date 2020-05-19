@@ -16,7 +16,6 @@
     #footer {
         width: 100%;
         height: 150px;
-        margin-top: 20px;
         padding: 30px 0 30px;
         box-sizing: border-box;
         box-shadow: 0 1px 2px aliceblue;

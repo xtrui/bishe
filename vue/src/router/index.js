@@ -5,6 +5,9 @@ import editor from "../views/Editor";
 import Article from "../views/Article";
 import Category from "../views/Category";
 import Search from "../views/Search";
+import Login from "../views/Login";
+import CategoryAll from '../views/CategoryAll';
+
 
 Vue.use(VueRouter)
 
@@ -13,6 +16,11 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: Login
     },
     {
         path: '/articles/:id',
@@ -25,11 +33,16 @@ const routes = [
         component: Category
     },
     {
+        path: '/categories/page',
+        name: 'categoryPage',
+        component: CategoryAll
+    },
+    {
         path: '/search/:key',
         name: 'search',
         component: Search
     },
-    //管理员路由
+    // 管理员路由
     {
         path: '/admin',
         name: 'admin',
@@ -42,19 +55,7 @@ const routes = [
             }
 
         ],
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/admin.vue')
-    },
-    {
-        path: '/editor',
-        name: 'editor',
-        component: editor
-    },
-    {
-        path: '/test',
-        name: 'test'
     },
     {
         path: '*',
@@ -67,5 +68,6 @@ const router = new VueRouter({
     mode: 'history',
     routes
 });
+let flag = false;
 
 export default router

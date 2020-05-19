@@ -5,9 +5,11 @@
                 <a href="/" class="homeLink">主页</a>
             </div>
             <div class="otherNav">
-                <div class="li"><a href="/category">分类</a></div>
                 <div class="li"><a href="/admin">后台</a></div>
-                <div class="li"><a href="/articles">登录</a></div>
+                <div class="li"><a href="/categories/page">分类</a></div>
+                <div class="li" v-if="!username"><a href="/login">登录</a></div>
+                <div class="li" v-else @click="logout"><p>欢迎{{username}}</p> <a href="#" style="font-size: 16px">登出</a>
+                </div>
             </div>
         </div>
     </div>
@@ -15,7 +17,25 @@
 
 <script>
     export default {
-        name: "NavTop"
+        name: "NavTop",
+        data() {
+            return {
+                username: ''
+            }
+        },
+        mounted() {
+            let user = JSON.parse(localStorage.getItem('user'));
+            console.log(user)
+            this.username = user ? user.username : '';
+        },
+        methods: {
+            logout() {
+                //登出操作
+                localStorage.clear();
+                location.reload();
+                console.log('登出');
+            }
+        }
     }
 </script>
 
@@ -26,6 +46,7 @@
         z-index: 100;
         height: 70px;
         overflow: hidden;
+        top: 0px;
     }
 
     .container {
@@ -69,6 +90,11 @@
         padding-top: 15px;
         font-size: 30px;
         font-weight: bold;
+    }
+
+    .li > p {
+        font-size: 16px;
+        color: #fb7299;
     }
 
 </style>

@@ -6,6 +6,14 @@ const FormData = require("form-data")
 const multipart = require('connect-multiparty');
 const fs = require('fs')
 let multipartMiddleware = multipart()
+
+router.all('/**', function (require, response, next) {
+    if (require.session.isAdmin || require.cookies.isAdmin) {
+        next();
+    } else {
+        response.status('403');
+    }
+});
 router.post('/images/up', multipartMiddleware, function (req, response) {
     console.log(req.files.image);
     const path = req.files.image.path;

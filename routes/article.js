@@ -13,17 +13,7 @@ router.get('/detail/:id', function (req, response) {
         });
 });
 
-router.post('/postArticle', function (require, response) {
-    console.log(require.body);
-    htt.httpUtils.post('/api/article/postArticle', require.body).then(res => {
-        console.log(res.data)
-        response.send({id: res.data});
-        response.status(200);
-    }).catch(error => {
-        response.status(400);
-        console.log(error)
-    })
-})
+
 
 router.get('/page/:page', function (req, response) {
     console.log(req.params.page, req.query);
@@ -53,11 +43,23 @@ router.get('/search', function (require, response) {
 })
 
 
-//下面是目录相关
+//下面是目录相关 categries
 
 router.get('/category/All', function (require, response) {
     htt.httpUtils.get('/api/category/All').then(res => {
         // console.log(res.data);
+        response.send(res.data);
+        response.status(200);
+    }).catch(error => {
+        response.status(400);
+        console.log(error)
+    })
+})
+
+router.get('/category/page', function (require, response) {
+    let page = require.query.page;
+    htt.httpUtils.get('/api/category/All/page', {params: {page: page}}).then(res => {
+        console.log(res.data);
         response.send(res.data);
         response.status(200);
     }).catch(error => {
