@@ -7,6 +7,8 @@ import Category from "../views/Category";
 import Search from "../views/Search";
 import Login from "../views/Login";
 import CategoryAll from '../views/CategoryAll';
+import ManageArticle from '../views/ManageArticle'
+import ManageComment from '../views/ManageComment'
 
 
 Vue.use(VueRouter)
@@ -52,6 +54,21 @@ const routes = [
                 path: 'blog',
                 name: 'blog',
                 component: editor
+            },
+            {
+                path: 'update/:id',
+                name: 'update',
+                component: editor
+            },
+            {
+                path: 'manageArticle',
+                name: 'manageArticle',
+                component: ManageArticle
+            },
+            {
+                path: 'manageComment',
+                name: 'manageComment',
+                component: ManageComment
             }
 
         ],

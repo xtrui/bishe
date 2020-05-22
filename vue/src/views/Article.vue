@@ -132,7 +132,7 @@
                 await http.get("/api/article/detail/" + this.$route.params.id)
                     .then(res => {
                         this.article = res.data;
-                        this.totalCommentNum = this.article.comments.height;
+                        this.totalCommentNum = this.article.comments.length;
                         console.log(this.article)
                     })
                     .catch(err => {

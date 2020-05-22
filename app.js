@@ -24,7 +24,6 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(cookieParser());
 //设置静态资源路径
 app.use(express.static('public'));
 app.use(express.static('vue/src/assets'));

@@ -10,6 +10,7 @@ router.post('/login', function (require, response) {
                 require.session.logined = 1;
                 if (res.data.role) {
                     require.session.isAdmin = 1;
+                    response.cookie('isAdmin', '1', {maxAge: 1000 * 60 * 60 * 24 * 30, httpOnly: true})
                 }
                 response.send(res.data);
             } else response.send('');

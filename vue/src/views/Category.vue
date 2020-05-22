@@ -115,7 +115,7 @@
                         } else if (this.articleNum < 3) {
                             this.row = 1;
                         } else {
-                            this.row = this.articleNum / 3 + 1;
+                            this.row = Math.ceil(this.articleNum / 3);
                         }
                     })
                     .catch(err => {

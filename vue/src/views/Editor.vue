@@ -32,9 +32,17 @@
         <div style="font-size: 50px;text-align: left;">
             <el-button
                     plain
+                    v-if="!this.$route.params.id"
                     type="success" icon="el-icon-check" @click="click" circle>
                 发 布
             </el-button>
+            <el-button
+                    plain
+                    v-else
+                    type="success" icon="el-icon-check" @click="update" circle>
+                更 新
+            </el-button>
+
         </div>
     </div>
 </template>
@@ -82,8 +90,31 @@
         mounted() {
             //加载分类
             this.initCategories();
+            //如果是更新那么获取文章细节
+            if (this.$route.params.id) {
+                this.getArticle();
+                console.log("获取文章", this.$route.params.id)
+            }
         },
         methods: {
+            update: function () {
+                if (this.categories.length === 0 || this.title === '' || this.content === '') {
+                    this.$alert('请勿留空', 'warn', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            this.$message({
+                                type: 'info',
+                                message: `发布取消`
+                            });
+                        }
+                    });
+                } else {
+                    this.article.categories = this.categories;
+                    this.article.title = this.title;
+                    this.article.content = this.content;
+                    this.updateArticle();
+                }
+            },
             click: function () {
                 // this.$notify({
                 //     title: '发布成功',
@@ -120,8 +151,58 @@
                         type: 'success'
                     });
                 }).catch(error => {
+                    this.$notify({
+                        title: '发布失败',
+                        dangerouslyUseHTMLString: true,
+                        message: '请查看控制台',
+                        duration: 0,
+                        type: 'warning'
+                    });
                     console.log(error)
                 })
+            },
+            //更新文章
+            async updateArticle() {
+                let article = this.article;
+                article.id = this.$route.params.id;
+                await axios.post("/api/admin/updateArticle", article).then(res => {
+                    this.$notify({
+                        title: '更新成功',
+                        dangerouslyUseHTMLString: true,
+                        message: '<a href="/articles/' + res.data.id + '"' + '>点击查看文章</a>',
+                        duration: 0,
+                        type: 'success'
+                    });
+                }).catch(error => {
+                    this.$notify({
+                        title: '更新失败',
+                        dangerouslyUseHTMLString: true,
+                        message: '请查看控制台',
+                        duration: 0,
+                        type: 'warning'
+                    });
+                    console.log(error)
+                })
+                //todo 这里请求后台更新
+
+                console.log("ggg" + this.$route.params.id)
+            },
+            //获取要更新的文章
+            async getArticle() {
+                await http.get("/api/article/detail/" + this.$route.params.id)
+                    .then(res => {
+                        this.content = res.data.content;
+                        res.data.categories.forEach(e => {
+                            let item = e.id + '|' + e.categoryName;
+                            console.log(e, item)
+                            this.categories.push(item);
+                        })
+                        this.title = res.data.title;
+                        console.log(this.article)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             },
 
             //加载分类
