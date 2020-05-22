@@ -95,12 +95,25 @@
                     ids.push(e.id);
                 })
                 let indexs = [];
-                this.articleList.forEach((value, index) => {
-                    if (ids.indexOf(value.id) !== -1) {
-                        indexs.push(index);
-                    }
-                })
-                this.delete(ids, indexs);
+
+                this.$confirm('此操作将永久删除选中文章, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.articleList.forEach((value, index) => {
+                        if (ids.indexOf(value.id) !== -1) {
+                            indexs.push(index);
+                        }
+                    })
+                    this.delete(ids, indexs);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
 
             },
             handleSelectionChange(val) {
@@ -115,9 +128,20 @@
             handleDelete(index, articleList) {
                 let ids = [];
                 let indexs = [];
-                ids.push(articleList[index].id)
-                indexs.push(index);
-                this.delete(ids, indexs);
+                this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    ids.push(articleList[index].id)
+                    indexs.push(index);
+                    this.delete(ids, indexs);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             async delete(ids, indexs) {
                 await http.post('/api/admin/deleteArticle', ids)
@@ -127,11 +151,10 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            indexs.forEach(e => {
-                                this.articleList.splice(e, 1);
-                            })
+                            this.getArticleListByPage();
 
                         } else {
+                            this.$message.error("删除失败,请查看控制台");
 
                         }
                     })

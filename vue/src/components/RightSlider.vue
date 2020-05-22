@@ -40,11 +40,11 @@
         },
         methods: {
             jump(id) {
-                window.location.href = "/category/" + id;
+                this.$router.push({path: "/category/" + id})
             },
             keyUp() {
                 if (this.input !== '') {
-                    window.location.href = "/search/" + this.input;
+                    this.$router.push({path: "/search/" + this.input})
                 }
             }
         }

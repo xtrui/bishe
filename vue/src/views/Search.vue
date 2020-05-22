@@ -109,17 +109,20 @@
                 let key = this.$route.params.key;
                 await http.get("/api/article/search", {params: {key: key, page: this.currentPage}})
                     .then(res => {
-                        this.articles = res.data.articleIdAndTitleList;
-                        this.articleNum = res.data.articleIdAndTitleList.length;
-                        this.totalArticleNum = 9 * res.data.totalPage;
-                        if (this.articleNum % 3 === 0) {
-                            this.row = this.articleNum / 3;
-                        } else if (this.articleNum < 3) {
+
+                        let articleNum = res.data.articleIdAndTitleList.length;
+                        this.articleNum = articleNum;
+                        if (articleNum % 3 === 0) {
+                            this.row = articleNum / 3;
+                        } else if (articleNum < 3) {
                             this.row = 1;
                         } else {
-                            this.row = Math.ceil(this.articleNum / 3);
+                            this.row = Math.ceil(articleNum / 3);
                         }
-                        console.log(this.articles, this.row, this.articleNum)
+                        this.totalArticleNum = 9 * res.data.totalPage;
+                        this.articles = res.data.articleIdAndTitleList;
+
+
                     })
                     .catch(err => {
                         console.log(err);

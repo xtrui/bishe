@@ -6,29 +6,26 @@
                 <el-radio-button :label="true">收起</el-radio-button>
             </el-radio-group>
             <el-menu
-                    default-active="1-1"
+                    :default-active="this.$route.path"
                     class="el-menu-vertical-demo"
                     background-color="#545c64"
                     text-color="#fff"
                     active-text-color="#ffd04b"
                     :collapse="!isCollapse"
+                    :router=true
             >
-
                 <el-submenu index="1">
                     <template slot="title">
                         <i class="el-icon-location"></i>
                         <span>文章管理</span>
                     </template>
-                    <el-menu-item index="1-1">
-                        <span>发表文章</span>
-                    </el-menu-item>
-                    <el-menu-item index="1-2">
-                        <span>管理文章</span>
+                    <el-menu-item v-for="item in articleNavList" :index="item.name">
+                        <span>{{item.label}}</span>
                     </el-menu-item>
                 </el-submenu>
-                <el-menu-item index="4">
+                <el-menu-item v-bind="commentNav" :index="commentNav.name">
                     <i class="el-icon-setting"></i>
-                    <span slot="title">评论管理</span>
+                    <span slot="title">{{commentNav.label}}</span>
                 </el-menu-item>
 
             </el-menu>
@@ -40,13 +37,12 @@
                 <el-menu
                         class="el-menu-demo"
                         mode="horizontal"
-                        @select="handleSelect(index,indexPath)"
                         background-color="#545c64"
                         text-color="#fff"
                         active-text-color="#ffd04b"
-                >
-                    <el-menu-item index="1">主页</el-menu-item>
-                    <el-menu-item index="2">目录</el-menu-item>
+                        @select="select">
+                    <el-menu-item index="/">主页</el-menu-item>
+                    <el-menu-item index="/categories/page">目录</el-menu-item>
                     <!--                    <el-submenu index="2">-->
                     <!--                        <template slot="title">我的工作台</template>-->
                     <!--                        <el-menu-item index="2-1">选项1</el-menu-item>-->
@@ -111,12 +107,23 @@
             };
             return {
                 isCollapse: true,
-                tableData: Array(20).fill(item)
+                tableData: Array(20).fill(item),
+                articleNavList: [
+                    {name: "/admin/blog", label: "发表文章"},
+                    {name: "/admin/manageArticle", label: "管理文章"},
+                ],
+                commentNav: {name: "/admin/manageComment", label: "评论管理"}
             }
         },
+        mounted() {
+            // console.log(this.$route.path);
+        },
         methods: {
-            handleSelect(index, indexPath) {
-                console.log(index + indexPath);
+            select(index, path) {
+                this.$router.push({path: index})
+            },
+            handleSelect(index) {
+                console.log(index);
             }
         },
 

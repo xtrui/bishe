@@ -16,6 +16,8 @@
 </template>
 
 <script>
+    import {AxiosInstance as Axios} from "axios";
+
     export default {
         name: "NavTop",
         data() {
@@ -32,6 +34,9 @@
             logout() {
                 //登出操作
                 localStorage.clear();
+                Axios.get("/api/user/logout").then(res => {
+                    console.log(res.data);
+                })
                 location.reload();
                 console.log('登出');
             }

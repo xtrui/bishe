@@ -3,6 +3,7 @@
         <div id="login">
             <h1>Login</h1>
             <input type="text" required="required" v-model="username" placeholder="用户名" name="u"></input>
+
             <input type="password" required="required" v-model="password" placeholder="密码" name="p"></input>
             <button class="but" @click="login">登录</button>
             <button class="but" @click="register">注册</button>
@@ -18,7 +19,8 @@
         data() {
             return {
                 username: '',
-                password: ''
+                password: '',
+                email: '',
             }
         },
         methods: {
@@ -30,7 +32,8 @@
                     if (res.data) {
                         let user = res.data;
                         localStorage.setItem('user', JSON.stringify(user));
-                        window.location.href = "/";
+                        this.$message('登陆成功');
+                        this.$router.push({path: "/"})
                     } else {
                         this.$message.error('账号不存在或密码错误');
                     }
@@ -39,7 +42,20 @@
                 })
             },
             register() {
-
+                axios.post('/api/users/register', {username: this.username, password: this.password}).then(res => {
+                    // this.$router.addRoutes(admin);
+                    // this.$router.push({path: "/admin"});
+                    if (res.data) {
+                        let user = res.data;
+                        localStorage.setItem('user', JSON.stringify(user));
+                        this.$message('登陆成功');
+                        this.$router.push({path: "/"})
+                    } else {
+                        this.$message.error('账号不存在或密码错误');
+                    }
+                }).catch(e => {
+                    console.log(e);
+                })
             }
         }
     }

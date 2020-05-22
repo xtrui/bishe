@@ -8,6 +8,7 @@ router.post('/login', function (require, response) {
         .then(res => {
             if (res.data) {
                 require.session.logined = 1;
+                response.cookie('logined', '1', {maxAge: 1000 * 60 * 60 * 24 * 30, httpOnly: true})
                 if (res.data.role) {
                     require.session.isAdmin = 1;
                     response.cookie('isAdmin', '1', {maxAge: 1000 * 60 * 60 * 24 * 30, httpOnly: true})
@@ -20,14 +21,14 @@ router.post('/login', function (require, response) {
 });
 router.get('/logout', (require, response) => {
     require.session.destroy(err => {
-
-        res.redirect('/');
-
     })
+    response.clearCookie('isAdmin');
+    response.clearCookie('logined');
+    res.redirect('/');
 })
 
 router.all('/u', function (require, response, next) {
-    if (require.session.logined) {
+    if (require.session.logined || require.cookies.logined) {
         next();
     } else {
         response.send(403);

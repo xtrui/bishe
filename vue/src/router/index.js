@@ -60,6 +60,8 @@ const routes = [
                 name: 'update',
                 component: editor
             },
+
+
             {
                 path: 'manageArticle',
                 name: 'manageArticle',
