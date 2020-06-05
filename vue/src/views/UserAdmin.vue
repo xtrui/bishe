@@ -14,26 +14,21 @@
                     :collapse="!isCollapse"
                     :router=true
             >
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span>文章管理</span>
-                    </template>
-                    <el-menu-item v-for="item in articleNavList" :index="item.name" :key="item.label">
-                        <span>{{item.label}}</span>
-                    </el-menu-item>
-                </el-submenu>
-                <el-menu-item v-bind="commentNav" :index="commentNav.name">
+                <el-menu-item index="/user/favorite">
+                    <i class="el-icon-location"></i>
+                    <span slot="title">收藏管理</span>
+                </el-menu-item>
+                <el-menu-item index="/user/comment">
                     <i class="el-icon-chat-line-round"></i>
-                    <span slot="title">{{commentNav.label}}</span>
+                    <span slot="title">评论管理</span>
                 </el-menu-item>
                 <el-menu-item index="用户管理">
                     <i class="el-icon-user-solid"></i>
                     <span slot="title">用户管理</span>
                 </el-menu-item>
-                <el-menu-item index="/admin/setting">
+                <el-menu-item index="/user/setting">
                     <i class="el-icon-setting"></i>
-                    <span slot="title">博客设置</span>
+                    <span slot="title">信息设置</span>
                 </el-menu-item>
 
             </el-menu>

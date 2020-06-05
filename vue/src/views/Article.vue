@@ -8,6 +8,10 @@
                         <el-col :span="15">
                             <BlogBody :article=article></BlogBody>
                             <button @click="drawer = true"><i class="el-icon-s-comment"></i></button>
+                            <button @click="cancelCollection" v-if="logined&&isFavorite"><i
+                                    class="el-icon-star-off"></i></button>
+                            <button @click="addCollection" v-if="logined&&!isFavorite"><i class="el-icon-star-on"></i>
+                            </button>
                         </el-col>
                         <el-col :span="6">
                             <RightSlider :class="{fix:isFix}" :categories=categories
@@ -24,6 +28,8 @@
                         <!--                        这里放评论组件-->
                         <!--                        <BlogBody :article=article></BlogBody>-->
                         <Comment v-for="e in article.comments" :comment="e" :key="e.id"></Comment>
+
+
                         <el-pagination
                                 @current-change="pageChange"
                                 :current-page.sync="currentPage"
@@ -76,16 +82,83 @@
                     comments: []
                 },
                 categories: [],
-                logined: 0
+                logined: 0,
+                isFavorite: 0,
+                userId: 0
             }
         },
         methods: {
             pageChange() {
                 //todo 评论分页
             },
+            //判断是否为收藏
+            async getIsFavorite() {
+                await http.get("/api/users/u/getIsFavorite", {
+                    params: {
+                        userId: this.userId,
+                        articleId: this.$route.params.id
+                    }
+                })
+                    .then(res => {
+                        console.log("res.data:", res.data);
+                        if (res.data) {
+                            this.isFavorite = 1;
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
+            },
+            //添加收藏
+            async addCollection() {
+
+                await http.post("/api/users/u/addCollection", {userId: this.userId, articleId: this.$route.params.id})
+                    .then(res => {
+                        if (res.data) {
+                            this.isFavorite = 1;
+                            this.$notify({
+                                title: "OK",
+                                message: "收藏成功",
+                                type: "success",
+                                duration: 0
+                            });
+                        } else {
+                            this.$notify.error("收藏失败")
+                        }
+                    })
+                    .catch(e => {
+                        this.$notify.error("收藏出错，请查看控制台")
+                        console.log(e);
+                    })
+            },
+            //取消收藏
+            async cancelCollection() {
+                await http.post("/api/users/u/cancelCollection", {
+                    userId: this.userId,
+                    articleId: this.$route.params.id
+                })
+                    .then(res => {
+                        if (res.data) {
+                            this.isFavorite = 0;
+                            this.$notify({
+                                title: "OK",
+                                message: "取消收藏成功",
+                                type: "success",
+                                duration: 0
+                            });
+                        } else {
+                            this.$notify.error("取消收藏失败")
+                        }
+                    })
+                    .catch(e => {
+                        this.$notify.error("取消收藏出错，请查看控制台")
+                        console.log(e);
+                    })
+            },
             handleScroll() {
                 let scrollTop = window.pageYOffset;
                 let eTop = document.getElementsByClassName("hidden-md-and-down").item(0);
+                let postMain = document.getElementsByClassName("post_main").item(0);
                 // let footer = document.getElementsByClassName('footer').item(0);
                 let flag = this.flag;
                 if (scrollTop > 332 && flag) {
@@ -131,9 +204,12 @@
             async getArticle() {
                 await http.get("/api/article/detail/" + this.$route.params.id)
                     .then(res => {
-                        this.article = res.data;
-                        this.totalCommentNum = this.article.comments.length;
-                        console.log(this.article)
+                        if (res.data) {
+                            this.article = res.data;
+                            this.totalCommentNum = this.article.comments.length;
+                        } else {
+                            this.$message("此处什么也没有");
+                        }
                     })
                     .catch(err => {
                         console.log(err);
@@ -170,7 +246,10 @@
             console.log(user);
             if (user) {
                 this.logined = 1;
+                this.userId = user.id;
             }
+            //获取收藏状态
+            this.getIsFavorite();
         },
         destroyed() {
             window.removeEventListener('scroll', this.handleScroll)

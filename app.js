@@ -25,11 +25,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 //设置静态资源路径
-app.use(express.static('public'));
 app.use(express.static('vue/src/assets'));
 app.use(express.static('vue/src/public'));
 // app.use(express.static(''));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 console.log(path.join(__dirname, 'public'));
 
 // 使用 cookieParser 中间件;

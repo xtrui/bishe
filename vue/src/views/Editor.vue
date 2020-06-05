@@ -23,6 +23,19 @@
                 </el-option>
             </el-select>
         </div>
+        <h3>上传视频:可选</h3>
+        <el-upload
+                class="upload-demo"
+                drag
+                action="/api/file/video/up"
+                :limit=1
+                :on-success="uploadVideoSuccess"
+                accept=".mp4"
+        >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">请将视频拖拽带此处，或<em>点击上传</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传.png文件，且不超过500kb</div>
+        </el-upload>
         <mavon-editor class="editor" ref="md" v-model="content" @imgAdd="imgAdd" @imgDel="imgDel"
                       placeholder="开始你的创作吧...."
         />
@@ -80,10 +93,13 @@
                 title: '',
                 options: [],
                 categories: [],
+                isFirst: true,
                 article: {
                     title: '',
                     content: '',
-                    categories: []
+                    categories: [],
+                    videoSrc: '',
+                    postSrc: ''
                 }
             }
         },
@@ -97,6 +113,12 @@
             }
         },
         methods: {
+            uploadVideoSuccess(res, file, fileList) {
+                if (res) {
+                    this.article.videoSrc = res;
+                    console.log(res);
+                }
+            },
             update: function () {
                 if (this.categories.length === 0 || this.title === '' || this.content === '') {
                     this.$alert('请勿留空', 'warn', {
@@ -242,6 +264,10 @@
                      */
                     console.log(res);
                     this.$refs.md.$img2Url(pos, res.data);
+                    if (this.isFist) {
+                        this.article.postSrc = res.data;
+                        this.isFirst = false;
+                    }
                 }).catch(error => {
                     console.log(error);
                 })

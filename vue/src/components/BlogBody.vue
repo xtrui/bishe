@@ -11,6 +11,9 @@
         </div>
         <mavon-editor defaultOpen="preview" :toolbarsFlag="false" :boxShadow="false" :subfield="false" :preview="true"
                       v-model="article.content"/>
+        <video :src="article.videoSrc" v-if="article.videoSrc" controls="controls" style="height: 360px;width: 640px">
+            您的浏览器不支持 video 标签。
+        </video>
     </div>
 </template>
 

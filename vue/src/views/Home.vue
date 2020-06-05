@@ -5,8 +5,8 @@
         <section id="section1">
             <div id="main_post">
                 <div class="blog_welcome">
-                    <h2 class="h2">个人博客</h2>
-                    <p class="p">你好啊</p>
+                    <h2 class="h2">{{blogName}}</h2>
+                    <p class="p">{{blogIntroduce}}</p>
                 </div>
                 <div class="i">
                     <a href="#blog_list"><i class="el-icon-s-promotion"></i></a>
@@ -62,7 +62,9 @@
                 totalArticleNum: 1,
                 articleList: [],
                 totalPage: 1,
-                username: ''
+                username: '',
+                blogName: JSON.parse(localStorage.getItem("setting")).blogName,
+                blogIntroduce: JSON.parse(localStorage.getItem("setting")).blogIntroduce
             }
         },
         mounted() {
@@ -179,6 +181,11 @@
     i {
         font-size: 30px;
         color: white;
+    }
+
+    .p {
+        margin-top: 35px;
+        letter-spacing: 2px;
     }
 
 </style>

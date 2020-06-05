@@ -8,9 +8,23 @@ router.all('/**', function (require, response, next) {
     if (require.session.isAdmin || require.cookies.isAdmin) {
         next();
     } else {
-        res.sendStatus(403);
+        response.send(403);
     }
 });
+
+//设置相关
+router.post('/updateSetting', function (require, response) {
+    htt.httpUtils.post('/api/setting/update', require.body).then(res => {
+        if (res.data) {
+            response.send(true);
+        } else {
+            response.send(false);
+        }
+    }).catch(error => {
+        console.log(error);
+        response.send(false);
+    })
+})
 
 //文章相关
 router.post('/postArticle', function (require, response) {

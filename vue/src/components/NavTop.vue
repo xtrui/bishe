@@ -5,7 +5,8 @@
                 <a href="/" class="homeLink">主页</a>
             </div>
             <div class="otherNav">
-                <div class="li"><a href="/admin">后台</a></div>
+                <div class="li" v-if="isAdmin"><a href="/admin">后台</a></div>
+                <div class="li" v-else><a href="#" @click="goto">后台</a></div>
                 <div class="li"><a href="/categories/page">分类</a></div>
                 <div class="li" v-if="!username"><a href="/login">登录</a></div>
                 <div class="li" v-else @click="logout"><p>欢迎{{username}}</p> <a href="#" style="font-size: 16px">登出</a>
@@ -16,29 +17,45 @@
 </template>
 
 <script>
-    import {AxiosInstance as Axios} from "axios";
+    import Axios from "axios";
 
     export default {
         name: "NavTop",
         data() {
             return {
-                username: ''
+                username: '',
+                isAdmin: false
             }
         },
         mounted() {
             let user = JSON.parse(localStorage.getItem('user'));
-            console.log(user)
+            if (user && user.role) {
+                this.isAdmin = true;
+            }
             this.username = user ? user.username : '';
         },
         methods: {
+            goto() {
+                let user = JSON.parse(localStorage.getItem('user'));
+                if (!user) {
+                    window.location.href = "/login";
+                }
+            },
             logout() {
                 //登出操作
-                localStorage.clear();
+                localStorage.removeItem('user');
                 Axios.get("/api/user/logout").then(res => {
                     console.log(res.data);
                 })
+                this.setCookie('isAdmin', "", -1);
+                this.setCookie('logined', "", -1);
                 location.reload();
                 console.log('登出');
+            },
+            setCookie(c_name, value, expire) {
+                let date = new Date()
+                date.setSeconds(date.getSeconds() + expire)
+                document.cookie = c_name + "=" + escape(value) + "; expires=" + date.toGMTString()
             }
         }
     }

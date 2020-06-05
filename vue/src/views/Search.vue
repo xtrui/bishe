@@ -9,10 +9,11 @@
                             <h1>search: {{this.$route.params.key}}</h1>
                             <!--                            这里放文章列表-->
                             <el-row v-for="index in row" :key="index" class="row">
-                                <el-col :span="6" v-for="(o, i) in 3" :key="o" :offset="i > 0 ? 2 : 0">
+                                <el-col :span="6" v-for="(o, i) in 3" :key="o" :offset="i > 0 ? 2 : 0"
+                                        v-if="articleNum > (index-1) *3 + i"
+                                >
                                     <transition name="el-zoom-in-center">
                                         <el-card v-show="show" :body-style="{ padding: '0px' }"
-                                                 v-if="articleNum > (index-1) *3 + i"
                                                  shadow="hover">
                                             <a :href='"/articles/"+articles[(index-1)*3+i].id'>
                                                 <img src='../assets/default.jpg' class="image" alt="picture">

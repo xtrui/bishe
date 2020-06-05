@@ -9,13 +9,18 @@
                             <h1>category: {{categoryName}}</h1>
                             <!--                            这里放文章列表-->
                             <el-row v-for="index in row" :key="index" class="row">
-                                <el-col :span="6" v-for="(o, i) in 3" :key="o" :offset="i > 0 ? 2 : 0">
+                                <el-col :span="6" v-for="(o, i) in 3" :key="o" :offset="i > 0 ? 2 : 0"
+                                        v-if="articleNum> (index-1) *3 + i"
+                                >
                                     <transition name="el-zoom-in-center">
                                         <el-card v-show="show" :body-style="{ padding: '0px' }"
-                                                 v-if="articleNum> (index-1) *3 + i"
+
                                                  shadow="hover">
                                             <a :href='"/articles/"+articles[(index-1)*3+i].id'>
-                                                <img src='../assets/default.jpg' class="image" alt="picture">
+
+                                                <img :src='articles[(index-1)*3+i].postSrc'
+                                                     v-if="articles[(index-1)*3+i].postSrc" class="image" alt="picture">
+                                                <img src='../assets/default.jpg' v-else class="image" alt="picture">
                                                 <div style="padding: 0 14px;">
                                                     <span class="article_title">{{articles[(index-1)*3+i].title}}</span>
                                                     <div class="bottom clearfix">
@@ -226,8 +231,8 @@
 
 
     .image {
-        width: 100%;
-        height: 50%;
+        width: 200px;
+        height: 150px;
         display: block;
     }
 

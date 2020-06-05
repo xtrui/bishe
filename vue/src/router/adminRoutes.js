@@ -12,7 +12,6 @@ adminRoutes = [
                 name: 'blog',
                 component: editor
             }
-
         ],
         component: () => import(/* webpackChunkName: "about" */ '../views/admin.vue')
     },

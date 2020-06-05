@@ -2,7 +2,7 @@
     <div class="comment">
         <div class="username"><h4>{{comment.name}}:</h4></div>
         <div class="context"><h5>{{comment.content}}</h5></div>
-        <div class="com_time">2020-5-6</div>
+        <div class="com_time">{{comment.time}}</div>
 
     </div>
 </template>

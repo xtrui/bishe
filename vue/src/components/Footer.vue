@@ -1,14 +1,19 @@
 <template>
     <div id="footer">
         <div class="footer_content">
-            <span>201650080229</span>
+            <span>{{beianInfo}}</span>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "my-footer"
+        name: "my-footer",
+        data() {
+            return {
+                beianInfo: JSON.parse(localStorage.getItem("setting")).beianInfo
+            }
+        }
     }
 </script>
 

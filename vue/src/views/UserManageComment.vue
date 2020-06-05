@@ -44,11 +44,6 @@
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            v-if="!scope.row.public"
-                            @click="publicComment(scope.$index, scope.row)">公开
-                    </el-button>
-                    <el-button
-                            size="mini"
                             type="danger"
                             @click="handleDelete(scope.$index, commentList)">删除
                     </el-button>
@@ -67,7 +62,6 @@
         </div>
         <div style="margin-top: 20px">
             <el-button @click="deleteSelected()">删除选中评论</el-button>
-            <el-button @click="publicSelected()">公开选中评论</el-button>
         </div>
     </div>
 </template>
@@ -86,11 +80,11 @@
         },
         mounted() {
             this.getCommentByPage();
-
         },
         methods: {
             async getCommentByPage() {
-                await http.get('/api/admin/getCommentByPage', {params: {page: this.currentPage}})
+                let user = JSON.parse(localStorage.getItem('user'));
+                await http.get('/api/users/u/getCommentByPage', {params: {page: this.currentPage, userId: user.id}})
                     .then(res => {
                         this.commentList = res.data.comments;
                         this.totalCommentNum = res.data.totalPage * 20;
@@ -103,14 +97,7 @@
             handleCurrentPageChange() {
                 this.getCommentByPage(this.currentPage);
             },
-            //公开单个
-            publicComment(index, row) {
-                let ids = [];
-                let indexs = [];
-                ids.push(row.id);
-                indexs.push(index);
-                this.public(ids, indexs);
-            },
+
             //删除单个
             handleDelete(index, commentList) {
                 this.$confirm('此操作将永久删除该评论, 是否继续?', '提示', {

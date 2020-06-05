@@ -2,7 +2,7 @@
     <div id="banner">
         <NavTop></NavTop>
         <div>
-            <h2>个人博客</h2>
+            <h2>{{blogName}}</h2>
         </div>
     </div>
 </template>
@@ -15,7 +15,8 @@
         components: {NavTop},
         data() {
             return {
-                username: ''
+                username: '',
+                blogName: JSON.parse(localStorage.getItem("setting")).blogName
             }
         }
     }

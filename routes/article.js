@@ -16,8 +16,6 @@ router.get('/detail/:id', function (req, response) {
 
 
 router.get('/page/:page', function (req, response) {
-    console.log(req.params.page, req.query);
-
     htt.httpUtils.get("/api/article/getArticleListByPage", {params: {page: req.params.page}})
         .then(res => {
             response.status(200);

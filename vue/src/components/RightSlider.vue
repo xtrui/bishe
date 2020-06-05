@@ -3,7 +3,7 @@
         <aside class="avatar">
             <div class="background"></div>
             <div><img :src="avatarUrl" alt="头像"></div>
-            <div class="introduce"><p>这是简介</p></div>
+            <div class="introduce"><p>{{authorIntroduce}}</p></div>
         </aside>
 
         <aside>
@@ -34,17 +34,18 @@
         },
         data() {
             return {
-                avatarUrl: require("../assets/avatar.jpg"),
-                input: ""
+                avatarUrl: require("@/assets/avatar.jpg"),
+                input: "",
+                authorIntroduce: JSON.parse(localStorage.getItem("setting")).authorIntroduce
             }
         },
         methods: {
             jump(id) {
-                this.$router.push({path: "/category/" + id})
+                window.location.href = "/category/" + id;
             },
             keyUp() {
                 if (this.input !== '') {
-                    this.$router.push({path: "/search/" + this.input})
+                    window.location.href = "/search/" + this.input;
                 }
             }
         }
@@ -103,6 +104,7 @@
     .introduce p {
         color: #333333;
         font-size: 16px;
+        letter-spacing: 2px;
         font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
     }
 

@@ -34,10 +34,33 @@
 </style>
 <script>
     import admin from "./views/admin";
+    import Axios from "axios";
 
     export default {
         components: {
             admin
+        },
+        mounted() {
+            if (!localStorage.getItem("setting")) {
+                this.get();
+            }
+
+        },
+        methods: {
+            get() {
+                Axios.get('/api/users/getSetting')
+                    .then(res => {
+                        if (res.status === 200) {
+                            localStorage.setItem("setting", JSON.stringify(res.data));
+                        } else {
+                            console.error("获取博客设置失败");
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
+
+                    })
+            },
         }
     }
 </script>

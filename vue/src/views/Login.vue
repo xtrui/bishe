@@ -3,10 +3,12 @@
         <div id="login">
             <h1>Login</h1>
             <input type="text" required="required" v-model="username" placeholder="用户名" name="u"></input>
-
+            <!--            <input type="password" required="required" v-model="email" placeholder="Email" name="p"></input>-->
+            <!--            <button class="but" @click="register">点击发送验证码到邮箱</button>-->
+            <!--            <input type="password" required="required" v-model="code" placeholder="验证码" name="p"></input>-->
             <input type="password" required="required" v-model="password" placeholder="密码" name="p"></input>
             <button class="but" @click="login">登录</button>
-            <button class="but" @click="register">注册</button>
+            <button class="but" @click="register">前往注册</button>
         </div>
     </div>
 </template>
@@ -21,6 +23,7 @@
                 username: '',
                 password: '',
                 email: '',
+                code: '',
             }
         },
         methods: {
@@ -42,20 +45,7 @@
                 })
             },
             register() {
-                axios.post('/api/users/register', {username: this.username, password: this.password}).then(res => {
-                    // this.$router.addRoutes(admin);
-                    // this.$router.push({path: "/admin"});
-                    if (res.data) {
-                        let user = res.data;
-                        localStorage.setItem('user', JSON.stringify(user));
-                        this.$message('登陆成功');
-                        this.$router.push({path: "/"})
-                    } else {
-                        this.$message.error('账号不存在或密码错误');
-                    }
-                }).catch(e => {
-                    console.log(e);
-                })
+                window.location.href = '/register'
             }
         }
     }

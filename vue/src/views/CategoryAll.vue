@@ -9,10 +9,11 @@
                             <h1>Categories</h1>
                             <!--                            //这里放文章列表-->
                             <el-row v-for="index in row" :key="index" class="row">
-                                <el-col :span="6" v-for="(o, i) in 3" :key="o" :offset="i > 0 ? 2 : 0">
+                                <el-col :span="6" v-for="(o, i) in 3" :key="o" :offset="i > 0 ? 2 : 0"
+                                        v-if="categoryNum >= (index-1) *3 + o"
+                                >
                                     <transition name="el-zoom-in-center">
                                         <el-card v-show="show" :body-style="{ padding: '0px' }"
-                                                 v-if="categoryNum> (index-1) *3 + i"
                                                  shadow="hover">
                                             <a :href='"/category/"+categories[(index-1)*3+i].id'>
                                                 <img src='../assets/default.jpg' class="image" alt="picture">
@@ -74,6 +75,7 @@
                 col: 0,
                 currentPage: 1,
                 totalCategoryNum: 0,
+                reflash: true,
             }
         },
         methods: {
@@ -128,6 +130,8 @@
                 this.getCategoryByPage();
                 let thisLink = this;
                 this.show = false;
+                this.$forceUpdate();
+                // this.$nextTick(e=>{})
                 setTimeout(function () {
                     thisLink.show = true;
                 }, 1000)
